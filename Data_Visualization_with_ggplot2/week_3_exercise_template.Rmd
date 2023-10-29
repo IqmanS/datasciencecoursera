@@ -1,0 +1,76 @@
+---
+title: "Week 3 Peer Review"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+######DO NOT MODIFY. This will load required packages and data.
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+cces <- drop_na(read_csv(url("https://www.dropbox.com/s/ahmt12y39unicd2/cces_sample_coursera.csv?raw=1")))
+
+cel <- drop_na(read_csv(url("https://www.dropbox.com/s/4ebgnkdhhxo5rac/cel_volden_wiseman%20_coursera.csv?raw=1")))
+
+```
+
+Following the directions on the Coursera assignment page, you will make four original visualizations. Note that the data for the CCES and CEL data are imported in code in the R Markdown file.
+
+### Put your name here: Iqman Singh Bhatia
+
+## Exercise 1
+
+Explain what you are visualizing here: No of Bills Passed vs Vote Percentage of 100th Congress
+
+Put your figure here:
+
+```{r exercise1,echo=T}
+
+cong100 = cel[cel$congress==100,]
+cong100 = rename(cong100,Gender = female)
+cong100$Gender[cong100$Gender == 0]="Male"
+cong100$Gender[cong100$Gender == 1]="Female"
+head(cong100)
+ggplot(data = cong100,aes(y=all_pass,x=votepct,color=Gender))+geom_jitter()+labs(title = "No of Bills Passed vs Vote Percentage of 100th Congress",x="Vote Percentafe",y="Bills Passed")  
+
+```
+
+## Exercise 2
+
+Explain what you are visualizing here:
+
+Put your figure here: Region vs Income
+
+```{r exercise2,echo=T}
+ggplot(data=cces,aes(x=region,y=faminc_new,group=region))+geom_boxplot()+labs(title = "Region vs Income" ,x="Region of Residence",y="Family Income ")
+  
+```
+
+## Exercise 3
+
+Explain what you are visualizing here: Education Loan vs Income
+
+Put your figure here:
+
+```{r exercise3,echo=T}
+ggplot(data=cces,aes(x=edloan,y=faminc_new,group=edloan))+geom_boxplot()+labs(title = "Education Loan vs Income" ,x="Education Loan",y="Family Income ")
+
+```
+
+## Exercise 4
+
+Explain what you are visualizing here: Bills Passed vs Vote Percent of Democrats or Republicans
+
+Put your figure here:
+
+```{r exercise4,echo=T}
+cong100$majority[cong100$majority == 0] = "Minority"
+cong100$majority[cong100$majority == 1] = "Majority"
+cong100$dem[cong100$dem == 0]="Republican"
+cong100$dem[cong100$dem == 1]="Democrat"
+
+ggplot(data=cong100,aes(x=votepct,y=all_pass,color=dem))+geom_jitter()+labs(title="Bills Passed vs Vote Percent of Democrats or Republicans",x="Vote Percentage",y="Bills Passed") + facet_grid(cols = vars(dem))
+
+```
